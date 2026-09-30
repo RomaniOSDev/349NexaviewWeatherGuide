@@ -2,16 +2,35 @@ import SwiftUI
 
 struct MeasureView: View {
     @EnvironmentObject private var store: ChillStore
+    @StateObject private var liveWeather = LiveWeatherService()
     @State private var temperatureText = ""
     @State private var windText = ""
     @State private var noteText = ""
     @State private var didHydrate = false
+    @State private var shareImage: UIImage?
+    @State private var showShare = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 18) {
-                TrailBanner(kind: .instruments, eyebrow: "MANUAL DIAL", title: "Ridge wind chill")
+                TrailBanner(
+                    kind: .exposure,
+                    eyebrow: scenarioEyebrow,
+                    title: scenarioTitle
+                )
                 ChillGaugeView(chill: displayedChill, units: store.preferredUnits, isValid: canRecord)
+                LiveWeatherCard(
+                    weather: liveWeather,
+                    units: store.preferredUnits,
+                    manualTemp: parsedTemperature,
+                    manualWind: parsedWind,
+                    onUseLive: { snapshot in
+                        store.applyLiveWeather(snapshot)
+                        temperatureText = WindChillMath.formatted(store.lastInputTemp)
+                        windText = WindChillMath.formatted(store.lastInputWindSpeed)
+                    }
+                )
+                ExposureTimerCard()
                 if showsExtreme {
                     ExtremeWarningCard(chillText: "\(WindChillMath.formatted(displayedChill)) \(store.preferredUnits.temperatureSymbol)")
                 }
@@ -25,6 +44,7 @@ struct MeasureView: View {
                     frostbitePlate
                     activityPlate
                     clothingPlate
+                    sharePlate
                 }
                 MeasureInputPanel(
                     temperatureText: $temperatureText,
@@ -43,6 +63,8 @@ struct MeasureView: View {
             .padding(.horizontal, ThemeMetrics.pagePadding)
             .padding(.bottom, 28)
         }
+        .scrollContentBackground(.hidden)
+        .background(Color.clear)
         .scrollDismissesKeyboard(.interactively)
         .onAppear(perform: hydrateIfNeeded)
         .onChange(of: store.preferredUnits) { _ in
@@ -61,6 +83,29 @@ struct MeasureView: View {
             temperatureText = WindChillMath.formatted(0)
             windText = WindChillMath.formatted(0)
             noteText = ""
+        }
+        .sheet(isPresented: $showShare) {
+            if let shareImage {
+                ActivityShareSheet(items: [shareImage]) {
+                    showShare = false
+                }
+            }
+        }
+    }
+
+    private var scenarioEyebrow: String {
+        switch store.activity {
+        case .hiking: return "TRAIL PLAN"
+        case .skiing: return "DESCENT PLAN"
+        case .working: return "SHIFT PLAN"
+        }
+    }
+
+    private var scenarioTitle: String {
+        switch store.activity {
+        case .hiking: return "Cold check for hiking"
+        case .skiing: return "Cold check for skiing"
+        case .working: return "Cold check for outdoor work"
         }
     }
 
@@ -95,7 +140,7 @@ struct MeasureView: View {
     private var frostbitePlate: some View {
         InstrumentPlate {
             VStack(alignment: .leading, spacing: 8) {
-                Text("FROSTBITE CLOCK")
+                Text("FROSTBITE WINDOW")
                     .font(ThemeMetrics.plate(11, weight: .bold))
                     .foregroundColor(Palette.gold)
                     .tracking(1.5)
@@ -113,7 +158,7 @@ struct MeasureView: View {
     private var activityPlate: some View {
         InstrumentPlate {
             VStack(alignment: .leading, spacing: 8) {
-                Text("ACTIVITY")
+                Text("SCENARIO")
                     .font(ThemeMetrics.plate(11, weight: .bold))
                     .foregroundColor(Palette.gold)
                     .tracking(1.5)
@@ -121,6 +166,9 @@ struct MeasureView: View {
                     ForEach(TrailActivity.allCases) { item in
                         Button {
                             store.setActivity(item)
+                            if !store.isExposureRunning {
+                                store.setExposureLimitMinutes(item.defaultExposureMinutes)
+                            }
                         } label: {
                             Text(item.title)
                                 .font(ThemeMetrics.plate(13, weight: .semibold))
@@ -144,7 +192,7 @@ struct MeasureView: View {
     private var clothingPlate: some View {
         InstrumentPlate {
             VStack(alignment: .leading, spacing: 8) {
-                Text("LAYERS · \(store.activity.title.uppercased())")
+                Text("KIT · \(store.activity.title.uppercased())")
                     .font(ThemeMetrics.plate(11, weight: .bold))
                     .foregroundColor(Palette.gold)
                     .tracking(1.5)
@@ -152,6 +200,39 @@ struct MeasureView: View {
                     .font(ThemeMetrics.plate(15))
                     .foregroundColor(Palette.ivory)
                     .fixedSize(horizontal: false, vertical: true)
+                ForEach(ClothingAdvice.kitItems(chill: displayedChill, units: store.preferredUnits, activity: store.activity), id: \.self) { item in
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(Palette.gold)
+                            .font(.system(size: 14))
+                        Text(item)
+                            .font(ThemeMetrics.plate(14))
+                            .foregroundColor(Palette.ivory)
+                    }
+                }
+            }
+        }
+    }
+
+    private var sharePlate: some View {
+        InstrumentPlate {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("SHARE TRIP CARD")
+                    .font(ThemeMetrics.plate(11, weight: .bold))
+                    .foregroundColor(Palette.gold)
+                    .tracking(1.5)
+                Text("Export a Messages / IG-ready card with chill and kit list.")
+                    .font(ThemeMetrics.plate(14))
+                    .foregroundColor(Palette.ivory)
+                BrassAction(title: "Share cold plan card", enabled: canRecord) {
+                    shareImage = TripCardExporter.renderImage(
+                        chill: displayedChill,
+                        units: store.preferredUnits,
+                        activity: store.activity,
+                        note: noteText
+                    )
+                    showShare = shareImage != nil
+                }
             }
         }
     }

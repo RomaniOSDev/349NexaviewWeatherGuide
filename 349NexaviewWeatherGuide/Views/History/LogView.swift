@@ -25,10 +25,10 @@ struct LogView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 14) {
-                TrailBanner(kind: .layers, eyebrow: "SAVED READINGS", title: "Field log")
+                TrailBanner(kind: .journal, eyebrow: "FIELD JOURNAL", title: "Saved conditions")
                 if store.windChillEntries.isEmpty {
                     InstrumentPlate {
-                        Text("No readings yet. Record a dial on Measure and it will land here.")
+                        Text("No readings yet. Save a chill check and it will land here.")
                             .font(ThemeMetrics.plate(15))
                             .foregroundColor(Palette.ivory)
                     }

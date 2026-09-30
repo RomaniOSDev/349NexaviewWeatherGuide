@@ -7,10 +7,10 @@ struct StatsView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 14) {
-                TrailBanner(kind: .lake, eyebrow: "FIELD TRENDS", title: "Chill statistics")
+                TrailBanner(kind: .trends, eyebrow: "COLD TRENDS", title: "Your exposure pattern")
                 if snapshot.points.isEmpty {
                     InstrumentPlate {
-                        Text("Record a few dials on Measure and the chill trend will draw here.")
+                        Text("Save a few chill checks and your exposure trend will draw here.")
                             .font(ThemeMetrics.plate(15))
                             .foregroundColor(Palette.ivory)
                     }

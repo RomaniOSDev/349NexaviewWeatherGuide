@@ -10,18 +10,24 @@ struct SettingsView: View {
         RidgeBackdrop {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 16) {
-                    TrailBanner(kind: .instruments, eyebrow: "PREFERENCES", title: "Dial and data")
+                    TrailBanner(kind: .trends, eyebrow: "PREFERENCES", title: "Plan and alerts")
                     unitsPlate
+                    alertsPlate
+                    actionPlate(title: "Change scenario", detail: "Re-open hiking / working / skiing onboarding.") {
+                        store.hasCompletedOnboarding = false
+                        UserDefaults.standard.set(false, forKey: DefaultsKeys.onboardingDone)
+                        dismiss()
+                    }
                     actionPlate(title: "Rate Us", detail: "Leave a short App Store review.") {
                         RatePrompt.present()
                     }
-                    actionPlate(title: "Privacy", detail: "Read how readings stay on device.") {
+                    actionPlate(title: "Privacy", detail: "Read how readings and location stay under your control.") {
                         open(AppLinks.privacy)
                     }
                     actionPlate(title: "Terms", detail: "Review the conditions of use.") {
                         open(AppLinks.terms)
                     }
-                    actionPlate(title: "Reset All Data", detail: "Clears logs, recents, sites, activity, and unit choice.", danger: true) {
+                    actionPlate(title: "Reset All Data", detail: "Clears logs, recents, sites, alerts, activity, and units.", danger: true) {
                         confirmReset = true
                     }
                     Button("Close") { dismiss() }
@@ -32,6 +38,8 @@ struct SettingsView: View {
                 }
                 .padding(ThemeMetrics.pagePadding)
             }
+            .scrollContentBackground(.hidden)
+            .background(Color.clear)
         }
         .alert("Reset All Data", isPresented: $confirmReset) {
             Button("Reset", role: .destructive) {
@@ -40,7 +48,7 @@ struct SettingsView: View {
             }
             Button("Keep Data", role: .cancel) { }
         } message: {
-            Text("This removes every saved reading, recent dial, last inputs, site presets, activity, and unit preference.")
+            Text("This removes every saved reading, recent dial, last inputs, site presets, activity, alerts, and unit preference.")
         }
         .onReceive(NotificationCenter.default.publisher(for: Notification.Name("dataReset"))) { _ in
             dismiss()
@@ -81,6 +89,49 @@ struct SettingsView: View {
         }
     }
 
+    private var alertsPlate: some View {
+        InstrumentPlate {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("CHILL ALERT")
+                    .font(ThemeMetrics.plate(11, weight: .bold))
+                    .foregroundColor(Palette.gold)
+                    .tracking(1.5)
+                Toggle(isOn: Binding(
+                    get: { store.chillAlertEnabled },
+                    set: { store.setChillAlertEnabled($0) }
+                )) {
+                    Text("Notify when chill hits threshold")
+                        .font(ThemeMetrics.plate(14))
+                        .foregroundColor(Palette.ivory)
+                }
+                .tint(Palette.gold)
+                if store.chillAlertEnabled {
+                    HStack {
+                        Text("Threshold")
+                            .font(ThemeMetrics.plate(14))
+                            .foregroundColor(Palette.ivory)
+                        Spacer()
+                        Text("\(WindChillMath.formatted(store.chillAlertThreshold)) \(store.preferredUnits.temperatureSymbol)")
+                            .font(ThemeMetrics.plate(14, weight: .semibold))
+                            .foregroundColor(Palette.gold)
+                    }
+                    Slider(
+                        value: Binding(
+                            get: { store.chillAlertThreshold },
+                            set: { store.setChillAlertThreshold($0) }
+                        ),
+                        in: store.preferredUnits == .metric ? -40...5 : -40...40,
+                        step: 1
+                    )
+                    .tint(Palette.gold)
+                    BrassAction(title: "Allow notifications", enabled: true) {
+                        Task { _ = await ChillNotificationCenter.requestAuthorizationIfNeeded() }
+                    }
+                }
+            }
+        }
+    }
+
     private func actionPlate(title: String, detail: String, danger: Bool = false, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
@@ -98,12 +149,12 @@ struct SettingsView: View {
                     .foregroundColor(Palette.gold)
             }
             .padding(14)
-            .background(Palette.card)
+            .background(Palette.card.opacity(0.92))
             .overlay(
-                RoundedRectangle(cornerRadius: ThemeMetrics.plateCorner, style: .continuous)
-                    .stroke(Palette.gold.opacity(0.4), lineWidth: ThemeMetrics.hairline)
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .stroke(Palette.gold.opacity(0.45), lineWidth: ThemeMetrics.hairline)
             )
-            .clipShape(RoundedRectangle(cornerRadius: ThemeMetrics.plateCorner, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
         .buttonStyle(.plain)
     }

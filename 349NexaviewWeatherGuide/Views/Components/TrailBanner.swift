@@ -1,15 +1,17 @@
 import SwiftUI
 
 enum TrailBannerKind {
-    case instruments
-    case layers
-    case lake
+    case exposure
+    case journal
+    case match
+    case trends
 
     var asset: String {
         switch self {
-        case .instruments: return "BannerInstruments"
-        case .layers: return "BannerLayers"
-        case .lake: return "BannerLake"
+        case .exposure: return "BannerExposure"
+        case .journal: return "BannerJournal"
+        case .match: return "BannerMatch"
+        case .trends: return "BannerTrends"
         }
     }
 }
@@ -28,7 +30,7 @@ struct TrailBanner: View {
             .clipped()
             .overlay(alignment: .bottomLeading) {
                 LinearGradient(
-                    colors: [Palette.purple.opacity(0.05), Palette.purple.opacity(0.78)],
+                    colors: [Palette.purple.opacity(0.05), Palette.purple.opacity(0.82)],
                     startPoint: .top,
                     endPoint: .bottom
                 )

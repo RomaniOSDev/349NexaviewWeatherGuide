@@ -33,7 +33,7 @@ struct MeasureInputPanel: View {
                 )
             }
             VStack(alignment: .leading, spacing: 8) {
-                Text("SITE PRESETS")
+                Text("PLACE SHORTCUTS")
                     .font(ThemeMetrics.plate(12, weight: .bold))
                     .foregroundColor(Palette.gold)
                     .tracking(1.2)
@@ -61,11 +61,11 @@ struct MeasureInputPanel: View {
                 }
             }
             VStack(alignment: .leading, spacing: 6) {
-                Text("FIELD NOTE")
+                Text("SESSION NOTE")
                     .font(ThemeMetrics.plate(12, weight: .bold))
                     .foregroundColor(Palette.gold)
                     .tracking(1.2)
-                TextField("Ridge, lake trail, camp…", text: $noteText)
+                TextField("Outlook, shore, shelter…", text: $noteText)
                     .font(ThemeMetrics.plate(15))
                     .foregroundColor(Palette.ivory)
                     .padding(.horizontal, 14)
@@ -77,7 +77,7 @@ struct MeasureInputPanel: View {
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             }
-            BrassAction(title: "Record Reading", enabled: canRecord, action: onRecord)
+            BrassAction(title: "Save chill check", enabled: canRecord, action: onRecord)
         }
     }
 }

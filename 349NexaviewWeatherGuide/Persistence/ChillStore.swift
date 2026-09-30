@@ -13,6 +13,12 @@ final class ChillStore: ObservableObject {
     @Published var draftNote: String = ""
     @Published var dialRevision: Int = 0
     @Published var requestedSection: MainSection?
+    @Published var hasCompletedOnboarding: Bool = false
+    @Published var chillAlertEnabled: Bool = false
+    @Published var chillAlertThreshold: Double = -15
+    @Published var exposureLimitMinutes: Int = 60
+    @Published var exposureStartedAt: Date?
+    @Published var isExposureRunning: Bool = false
 
     private let defaults: UserDefaults
     private var bag = Set<AnyCancellable>()
@@ -31,6 +37,14 @@ final class ChillStore: ObservableObject {
             .store(in: &bag)
     }
 
+    func completeOnboarding(with activity: TrailActivity) {
+        setActivity(activity)
+        exposureLimitMinutes = activity.defaultExposureMinutes
+        defaults.set(exposureLimitMinutes, forKey: DefaultsKeys.exposureLimitMinutes)
+        hasCompletedOnboarding = true
+        defaults.set(true, forKey: DefaultsKeys.onboardingDone)
+    }
+
     func persistInputs(temperature: Double, windSpeed: Double) {
         lastInputTemp = temperature
         lastInputWindSpeed = windSpeed
@@ -42,6 +56,7 @@ final class ChillStore: ObservableObject {
         guard units != preferredUnits else { return }
         lastInputTemp = UnitBridge.temperature(lastInputTemp, from: preferredUnits, to: units)
         lastInputWindSpeed = UnitBridge.wind(lastInputWindSpeed, from: preferredUnits, to: units)
+        chillAlertThreshold = UnitBridge.temperature(chillAlertThreshold, from: preferredUnits, to: units)
         preferredUnits = units
         persistAll()
     }
@@ -49,6 +64,52 @@ final class ChillStore: ObservableObject {
     func setActivity(_ activity: TrailActivity) {
         self.activity = activity
         defaults.set(activity.rawValue, forKey: DefaultsKeys.trailActivity)
+    }
+
+    func setChillAlertEnabled(_ enabled: Bool) {
+        chillAlertEnabled = enabled
+        defaults.set(enabled, forKey: DefaultsKeys.chillAlertEnabled)
+        if !enabled {
+            ChillNotificationCenter.cancelChillThreshold()
+        }
+    }
+
+    func setChillAlertThreshold(_ value: Double) {
+        chillAlertThreshold = value
+        defaults.set(value, forKey: DefaultsKeys.chillAlertThreshold)
+    }
+
+    func setExposureLimitMinutes(_ minutes: Int) {
+        exposureLimitMinutes = max(5, min(240, minutes))
+        defaults.set(exposureLimitMinutes, forKey: DefaultsKeys.exposureLimitMinutes)
+    }
+
+    func startExposureSession() {
+        exposureStartedAt = Date()
+        isExposureRunning = true
+        Task {
+            await ChillNotificationCenter.scheduleExposureLimit(
+                minutes: exposureLimitMinutes,
+                activity: activity
+            )
+        }
+    }
+
+    func stopExposureSession() {
+        exposureStartedAt = nil
+        isExposureRunning = false
+        ChillNotificationCenter.cancelExposureLimit()
+    }
+
+    func evaluateChillAlert(for chill: Double) {
+        guard chillAlertEnabled else { return }
+        Task {
+            await ChillNotificationCenter.scheduleChillThreshold(
+                chill: chill,
+                threshold: chillAlertThreshold,
+                units: preferredUnits
+            )
+        }
     }
 
     func applySite(_ site: SitePreset) {
@@ -98,7 +159,14 @@ final class ChillStore: ObservableObject {
         draftNote = entry.locationNote
         syncSelectedSite(with: entry.locationNote)
         dialRevision += 1
-        requestedSection = .measure
+        requestedSection = .chill
+    }
+
+    func applyLiveWeather(_ snapshot: LiveWeatherSnapshot) {
+        lastInputTemp = snapshot.temperature(in: preferredUnits)
+        lastInputWindSpeed = snapshot.wind(in: preferredUnits)
+        persistInputs(temperature: lastInputTemp, windSpeed: lastInputWindSpeed)
+        dialRevision += 1
     }
 
     func record(temperature: Double, windSpeed: Double, locationNote: String) -> WindChillEntry {
@@ -118,6 +186,7 @@ final class ChillStore: ObservableObject {
         persistInputs(temperature: temperature, windSpeed: windSpeed)
         rememberSite(temperature: temperature, windSpeed: windSpeed, note: locationNote)
         persistAll()
+        evaluateChillAlert(for: chill)
         return entry
     }
 
@@ -137,6 +206,7 @@ final class ChillStore: ObservableObject {
     }
 
     func resetAllData() {
+        stopExposureSession()
         recentCalculations = []
         windChillEntries = []
         preferredUnits = .metric
@@ -146,6 +216,9 @@ final class ChillStore: ObservableObject {
         selectedSite = nil
         draftNote = ""
         siteDials = [:]
+        chillAlertEnabled = false
+        chillAlertThreshold = -15
+        exposureLimitMinutes = 60
         dialRevision += 1
         defaults.removeObject(forKey: DefaultsKeys.recentCalculations)
         defaults.removeObject(forKey: DefaultsKeys.windChillEntries)
@@ -155,6 +228,9 @@ final class ChillStore: ObservableObject {
         defaults.removeObject(forKey: DefaultsKeys.trailActivity)
         defaults.removeObject(forKey: DefaultsKeys.selectedSite)
         defaults.removeObject(forKey: DefaultsKeys.siteDials)
+        defaults.removeObject(forKey: DefaultsKeys.chillAlertEnabled)
+        defaults.removeObject(forKey: DefaultsKeys.chillAlertThreshold)
+        defaults.removeObject(forKey: DefaultsKeys.exposureLimitMinutes)
         NotificationCenter.default.post(name: Notification.Name("dataReset"), object: nil)
     }
 
@@ -178,22 +254,39 @@ final class ChillStore: ObservableObject {
             lastInputWindSpeed = 0
         }
         if let raw = defaults.string(forKey: DefaultsKeys.trailActivity),
-           let stored = TrailActivity(rawValue: raw) {
+           let stored = TrailActivity.migrating(rawValue: raw) {
             activity = stored
         } else {
             activity = .hiking
         }
         if let raw = defaults.string(forKey: DefaultsKeys.selectedSite),
-           let site = SitePreset(rawValue: raw) {
+           let site = SitePreset.migrating(rawValue: raw) {
             selectedSite = site
         } else {
             selectedSite = nil
         }
         if let data = defaults.data(forKey: DefaultsKeys.siteDials),
            let decoded = try? JSONDecoder().decode([String: SiteDial].self, from: data) {
-            siteDials = decoded
+            var migrated: [String: SiteDial] = [:]
+            for (key, dial) in decoded {
+                let newKey = SitePreset.migrating(rawValue: key)?.rawValue ?? key
+                migrated[newKey] = dial
+            }
+            siteDials = migrated
         } else {
             siteDials = [:]
+        }
+        hasCompletedOnboarding = defaults.bool(forKey: DefaultsKeys.onboardingDone)
+        chillAlertEnabled = defaults.bool(forKey: DefaultsKeys.chillAlertEnabled)
+        if defaults.object(forKey: DefaultsKeys.chillAlertThreshold) != nil {
+            chillAlertThreshold = defaults.double(forKey: DefaultsKeys.chillAlertThreshold)
+        } else {
+            chillAlertThreshold = preferredUnits == .metric ? -15 : 5
+        }
+        if defaults.object(forKey: DefaultsKeys.exposureLimitMinutes) != nil {
+            exposureLimitMinutes = defaults.integer(forKey: DefaultsKeys.exposureLimitMinutes)
+        } else {
+            exposureLimitMinutes = activity.defaultExposureMinutes
         }
     }
 
@@ -204,6 +297,9 @@ final class ChillStore: ObservableObject {
         defaults.set(lastInputTemp, forKey: DefaultsKeys.lastInputTemp)
         defaults.set(lastInputWindSpeed, forKey: DefaultsKeys.lastInputWindSpeed)
         defaults.set(activity.rawValue, forKey: DefaultsKeys.trailActivity)
+        defaults.set(chillAlertEnabled, forKey: DefaultsKeys.chillAlertEnabled)
+        defaults.set(chillAlertThreshold, forKey: DefaultsKeys.chillAlertThreshold)
+        defaults.set(exposureLimitMinutes, forKey: DefaultsKeys.exposureLimitMinutes)
         persistSites()
         if let selectedSite {
             defaults.set(selectedSite.rawValue, forKey: DefaultsKeys.selectedSite)

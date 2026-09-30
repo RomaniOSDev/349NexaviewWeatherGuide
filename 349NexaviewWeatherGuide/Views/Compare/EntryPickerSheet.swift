@@ -11,7 +11,7 @@ struct EntryPickerSheet: View {
     var body: some View {
         RidgeBackdrop {
             VStack(alignment: .leading, spacing: 14) {
-                TrailBanner(kind: .lake, eyebrow: "CHOOSE READING", title: title)
+                TrailBanner(kind: .match, eyebrow: "CHOOSE READING", title: title)
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 10) {
                         ForEach(entries.filter { $0.id != excluding }) { entry in

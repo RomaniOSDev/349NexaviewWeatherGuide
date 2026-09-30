@@ -33,6 +33,12 @@
 		8E97A45EDB46EE1378090A96 /* ChillGaugeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBB69CD0AD490F52AB2F1C /* ChillGaugeView.swift */; };
 		920BB7476374986C57172B0B /* MainSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58C2BF198E995699FD1C5D1 /* MainSection.swift */; };
 		9A46FB8EE911857E9B8C064F /* ClothingAdvice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E079BD865ACD24898E7F67 /* ClothingAdvice.swift */; };
+		A1CHILLNOTIFY000000000001 /* ChillNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CHILLNOTIFY000000000002 /* ChillNotificationCenter.swift */; };
+		A1EXPTIMER000000000000001 /* ExposureTimerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EXPTIMER000000000000002 /* ExposureTimerCard.swift */; };
+		A1LIVEWCARD00000000000001 /* LiveWeatherCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1LIVEWCARD00000000000002 /* LiveWeatherCard.swift */; };
+		A1LIVEWEATHER000000000001 /* LiveWeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1LIVEWEATHER000000000002 /* LiveWeatherService.swift */; };
+		A1ONBOARDVIEW000000000001 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ONBOARDVIEW000000000002 /* OnboardingView.swift */; };
+		A1TRIPSHARE00000000000001 /* TripShareCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1TRIPSHARE00000000000002 /* TripShareCard.swift */; };
 		A30AB00A3F1062564FDA9E78 /* SafeParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AABE0813C02C49DABC06D0 /* SafeParse.swift */; };
 		B4C8EF2E3FADBA926EB22B28 /* UnitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDE0E82C80B9297037FE39D /* UnitBridge.swift */; };
 		B5D92F18C3EA507B2F6D4C01 /* FieldOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C81E07B2D94F6A1E5C3B90 /* FieldOptions.swift */; };
@@ -87,6 +93,12 @@
 		8D14A6C0B3E79251F4A8C167 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		921F505068CD2A1CC8FD936D /* ContrastResultPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContrastResultPanel.swift; sourceTree = "<group>"; };
 		93C1C08693E6D0D9234D52B8 /* 349NexaviewWeatherGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 349NexaviewWeatherGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1CHILLNOTIFY000000000002 /* ChillNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChillNotificationCenter.swift; sourceTree = "<group>"; };
+		A1EXPTIMER000000000000002 /* ExposureTimerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureTimerCard.swift; sourceTree = "<group>"; };
+		A1LIVEWCARD00000000000002 /* LiveWeatherCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWeatherCard.swift; sourceTree = "<group>"; };
+		A1LIVEWEATHER000000000002 /* LiveWeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWeatherService.swift; sourceTree = "<group>"; };
+		A1ONBOARDVIEW000000000002 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A1TRIPSHARE00000000000002 /* TripShareCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripShareCard.swift; sourceTree = "<group>"; };
 		A4C81E07B2D94F6A1E5C3B90 /* FieldOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldOptions.swift; sourceTree = "<group>"; };
 		A4DDE4088E231B0470E0E768 /* EntryPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryPickerSheet.swift; sourceTree = "<group>"; };
 		A5F4C071101F8720F5033E7F /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
@@ -162,6 +174,8 @@
 			isa = PBXGroup;
 			children = (
 				8BFBB69CD0AD490F52AB2F1C /* ChillGaugeView.swift */,
+				A1EXPTIMER000000000000002 /* ExposureTimerCard.swift */,
+				A1LIVEWCARD00000000000002 /* LiveWeatherCard.swift */,
 				FB34420C0D344CBDB26F73DC /* MeasureInputPanel.swift */,
 				8CF1BF666F8BAFF650299903 /* MeasureView.swift */,
 				44435ADFB63B38D4CAFA3789 /* RecentTickStrip.swift */,
@@ -179,6 +193,7 @@
 				04A5FE61C95E9E71F7C38732 /* RidgeBackdrop.swift */,
 				BF24E3F6A1DCFCE08ABD5825 /* SegmentRail.swift */,
 				5EE8362939F8E8A7F2549E31 /* TrailBanner.swift */,
+				A1TRIPSHARE00000000000002 /* TripShareCard.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -187,9 +202,11 @@
 			isa = PBXGroup;
 			children = (
 				5709AB97C1C73AAC9DC2948B /* AppLinks.swift */,
+				A1CHILLNOTIFY000000000002 /* ChillNotificationCenter.swift */,
 				D0E079BD865ACD24898E7F67 /* ClothingAdvice.swift */,
 				C786BCB29B09FF511CC6F9B7 /* DateStamp.swift */,
 				721824967DC879AEE9B57823 /* InputLimits.swift */,
+				A1LIVEWEATHER000000000002 /* LiveWeatherService.swift */,
 				5636B10F6823E10FC6026D46 /* RatePrompt.swift */,
 				D0AABE0813C02C49DABC06D0 /* SafeParse.swift */,
 				C6E03A29D4FB618C3A7E5D12 /* FrostbiteRisk.swift */,
@@ -210,6 +227,14 @@
 				5B5FC7A3CE0B0FDDEF393277 /* SceneDelegate.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		A1ONBOARDGRP0000000000001 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				A1ONBOARDVIEW000000000002 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		A40AABAD889A4AC26071B0CA /* Compare */ = {
@@ -274,6 +299,7 @@
 				3FBE19681D3742264EB0A007 /* Components */,
 				D06118CB57CDA19EF0B58A40 /* ContentView.swift */,
 				BD1EC13E2791420E198CCC36 /* History */,
+				A1ONBOARDGRP0000000000001 /* Onboarding */,
 				DFEE70731519176B380780D4 /* Settings */,
 				BD4E8A17C2F3906B5A1D4E82 /* Stats */,
 			);
@@ -401,6 +427,12 @@
 				C7B90E24A1D56F83C2E4B01A /* StatsView.swift in Sources */,
 				B5D92F18C3EA507B2F6D4C01 /* FieldOptions.swift in Sources */,
 				D7F14B3AE506729D4B8F6E23 /* FrostbiteRisk.swift in Sources */,
+				A1LIVEWEATHER000000000001 /* LiveWeatherService.swift in Sources */,
+				A1CHILLNOTIFY000000000001 /* ChillNotificationCenter.swift in Sources */,
+				A1ONBOARDVIEW000000000001 /* OnboardingView.swift in Sources */,
+				A1LIVEWCARD00000000000001 /* LiveWeatherCard.swift in Sources */,
+				A1EXPTIMER000000000000001 /* ExposureTimerCard.swift in Sources */,
+				A1TRIPSHARE00000000000001 /* TripShareCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +449,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = 349NexaviewWeatherGuide/App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Nexaview Weather Guide";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is used only to fetch nearby air temperature and wind from Open-Meteo so you can compare live conditions with your manual chill check.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -425,7 +458,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ano.n3x1v83ww37th2r;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -502,6 +535,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = 349NexaviewWeatherGuide/App/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Nexaview Weather Guide";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is used only to fetch nearby air temperature and wind from Open-Meteo so you can compare live conditions with your manual chill check.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -510,7 +544,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ano.n3x1v83ww37th2r;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

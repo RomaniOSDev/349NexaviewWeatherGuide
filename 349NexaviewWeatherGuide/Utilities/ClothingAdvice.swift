@@ -6,6 +6,33 @@ enum ClothingAdvice {
         return "\(base(chillC: chillC)) \(coda(chillC: chillC, activity: activity))"
     }
 
+    static func kitItems(chill: Double, units: PreferredUnits, activity: TrailActivity) -> [String] {
+        let chillC = UnitBridge.temperature(chill, from: units, to: .metric)
+        var items: [String] = []
+        if chillC < -27 {
+            items = ["Full face cover", "Insulated parka", "Mitts + liner", "Windproof boots", "Short outdoor windows"]
+        } else if chillC < -18 {
+            items = ["Parka", "Insulated boots", "Face mask", "Mitts", "Windproof shell"]
+        } else if chillC < -10 {
+            items = ["Insulated coat", "Warm hat", "Gloves", "Core shell", "Neck gaiter"]
+        } else if chillC < 0 {
+            items = ["Fleece mid-layer", "Wind jacket", "Light gloves", "Beanie", "Dry base layer"]
+        } else if chillC < 10 {
+            items = ["Long sleeves", "Light insulated jacket", "Optional gloves", "Packable shell"]
+        } else {
+            items = ["Breathable layers", "Packable shell", "Sun / wind cap"]
+        }
+        switch activity {
+        case .hiking:
+            items.append(chillC < -10 ? "Vent zipper on climbs" : "Pace without soaking")
+        case .skiing:
+            items.append(chillC < -10 ? "Goggles + covered face" : "Windproof front for descent")
+        case .working:
+            items.append(chillC < 0 ? "Static warm layer nearby" : "Rotate indoors on schedule")
+        }
+        return items
+    }
+
     private static func base(chillC: Double) -> String {
         if chillC < -27.0 {
             return "Frostbite range. Cover every patch of skin and keep outdoor time short."
@@ -17,7 +44,7 @@ enum ClothingAdvice {
             return "Insulated coat, warm hat, gloves, and a sealed shell over the core."
         }
         if chillC < 0.0 {
-            return "Fleece layers, a wind jacket, and light gloves for the exposed trail."
+            return "Fleece layers, a wind jacket, and light gloves for open ground."
         }
         if chillC < 10.0 {
             return "Long sleeves and a light insulated jacket are enough for this chill."
@@ -37,11 +64,11 @@ enum ClothingAdvice {
                 return "Ski shell, goggles, and a covered face; the descent wind is harsher than the dial."
             }
             return "Windproof the front of the body for the descent, even if the climb feels mild."
-        case .standing:
+        case .working:
             if chillC < 0.0 {
-                return "You are not generating trail heat. Add a static layer and rotate indoors sooner."
+                return "Low movement cools you faster. Add a static layer and rotate indoors sooner."
             }
-            return "Standing cools you faster than walking. Keep an extra layer within reach."
+            return "Outdoor work cools faster than hiking. Keep an extra layer within reach."
         }
     }
 }

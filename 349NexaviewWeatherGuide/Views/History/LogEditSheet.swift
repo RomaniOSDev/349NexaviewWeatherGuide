@@ -12,7 +12,7 @@ struct LogEditSheet: View {
     var body: some View {
         RidgeBackdrop {
             VStack(spacing: 16) {
-                TrailBanner(kind: .layers, eyebrow: "ADJUST LOG", title: "Revise a reading")
+                TrailBanner(kind: .journal, eyebrow: "ADJUST LOG", title: "Revise a reading")
                 DialField(
                     label: "AIR",
                     unit: entry.units.temperatureSymbol,

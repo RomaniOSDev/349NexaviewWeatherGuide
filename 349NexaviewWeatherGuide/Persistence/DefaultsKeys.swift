@@ -9,4 +9,8 @@ enum DefaultsKeys {
     static let trailActivity = "trailActivity"
     static let selectedSite = "selectedSite"
     static let siteDials = "siteDials"
+    static let onboardingDone = "onboardingDone"
+    static let chillAlertEnabled = "chillAlertEnabled"
+    static let chillAlertThreshold = "chillAlertThreshold"
+    static let exposureLimitMinutes = "exposureLimitMinutes"
 }

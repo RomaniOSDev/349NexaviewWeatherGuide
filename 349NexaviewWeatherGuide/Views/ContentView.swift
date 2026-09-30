@@ -2,10 +2,22 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var store = ChillStore()
-    @State private var section: MainSection = .measure
+    @State private var section: MainSection = .chill
     @State private var showSettings = false
 
     var body: some View {
+        Group {
+            if store.hasCompletedOnboarding {
+                mainShell
+            } else {
+                OnboardingView()
+            }
+        }
+        .environmentObject(store)
+        .preferredColorScheme(.dark)
+    }
+
+    private var mainShell: some View {
         RidgeBackdrop {
             VStack(spacing: 14) {
                 HStack(alignment: .center, spacing: 10) {
@@ -32,22 +44,20 @@ struct ContentView: View {
 
                 Group {
                     switch section {
-                    case .measure:
+                    case .chill:
                         MeasureView()
-                    case .log:
+                    case .journal:
                         LogView()
-                    case .contrast:
+                    case .match:
                         ContrastView()
-                    case .stats:
+                    case .trends:
                         StatsView()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .environmentObject(store)
         .tint(Palette.gold)
-        .preferredColorScheme(.dark)
         .sheet(isPresented: $showSettings) {
             SettingsView()
                 .environmentObject(store)

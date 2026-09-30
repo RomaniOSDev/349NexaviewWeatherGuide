@@ -20,7 +20,7 @@ struct ContrastView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 14) {
-                TrailBanner(kind: .lake, eyebrow: "SIDE BY SIDE", title: "Contrast two logs")
+                TrailBanner(kind: .match, eyebrow: "CONDITION MATCH", title: "Compare two days")
                 slotPlate(title: "READING A", entry: first, action: { pickingSlot = .first })
                 slotPlate(title: "READING B", entry: second, action: { pickingSlot = .second })
                 if let comparison {
@@ -30,7 +30,7 @@ struct ContrastView: View {
                     ContrastResultPanel(comparison: comparison)
                 } else if store.windChillEntries.count < 2 {
                     InstrumentPlate {
-                        Text("Save at least two readings in the log before contrasting them.")
+                        Text("Save at least two journal readings before matching them.")
                             .font(ThemeMetrics.plate(15))
                             .foregroundColor(Palette.ivory)
                     }

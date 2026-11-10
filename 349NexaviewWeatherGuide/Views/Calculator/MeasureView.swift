@@ -31,6 +31,7 @@ struct MeasureView: View {
                     }
                 )
                 ExposureTimerCard()
+                BriefSealPanel(chill: displayedChill, isValid: canRecord)
                 if showsExtreme {
                     ExtremeWarningCard(chillText: "\(WindChillMath.formatted(displayedChill)) \(store.preferredUnits.temperatureSymbol)")
                 }
@@ -95,17 +96,17 @@ struct MeasureView: View {
 
     private var scenarioEyebrow: String {
         switch store.activity {
-        case .hiking: return "TRAIL PLAN"
-        case .skiing: return "DESCENT PLAN"
-        case .working: return "SHIFT PLAN"
+        case .hiking: return "OUTING BRIEF"
+        case .skiing: return "DESCENT BRIEF"
+        case .working: return "SHIFT BRIEF"
         }
     }
 
     private var scenarioTitle: String {
         switch store.activity {
-        case .hiking: return "Cold check for hiking"
-        case .skiing: return "Cold check for skiing"
-        case .working: return "Cold check for outdoor work"
+        case .hiking: return "Go / no-go for hiking"
+        case .skiing: return "Go / no-go for skiing"
+        case .working: return "Go / no-go for outdoor work"
         }
     }
 

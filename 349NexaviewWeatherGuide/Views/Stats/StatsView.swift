@@ -7,10 +7,23 @@ struct StatsView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 14) {
-                TrailBanner(kind: .trends, eyebrow: "COLD TRENDS", title: "Your exposure pattern")
+                TrailBanner(kind: .trends, eyebrow: "COLD PATTERN", title: "Seals and chill trend")
+                if !store.outingSeals.isEmpty {
+                    InstrumentPlate {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("SEAL SUMMARY")
+                                .font(ThemeMetrics.plate(11, weight: .bold))
+                                .foregroundColor(Palette.gold)
+                                .tracking(1.5)
+                            Text("\(store.outingSeals.count) sealed outings · avg \(avgSealMinutes) min")
+                                .font(ThemeMetrics.plate(15))
+                                .foregroundColor(Palette.ivory)
+                        }
+                    }
+                }
                 if snapshot.points.isEmpty {
                     InstrumentPlate {
-                        Text("Save a few chill checks and your exposure trend will draw here.")
+                        Text("Save a few cold checks and seal outings to draw your pattern here.")
                             .font(ThemeMetrics.plate(15))
                             .foregroundColor(Palette.ivory)
                     }
@@ -30,6 +43,12 @@ struct StatsView: View {
 
     private var snapshot: LogSnapshot {
         LogSnapshot(entries: store.windChillEntries, units: store.preferredUnits)
+    }
+
+    private var avgSealMinutes: Int {
+        guard !store.outingSeals.isEmpty else { return 0 }
+        let total = store.outingSeals.reduce(0) { $0 + $1.minutesOutside }
+        return total / store.outingSeals.count
     }
 
     private var summaryPlate: some View {

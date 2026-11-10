@@ -1,19 +1,19 @@
 import Foundation
 
 enum MainSection: String, CaseIterable, Identifiable {
-    case chill
-    case journal
+    case brief
+    case outings
     case match
-    case trends
+    case pattern
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
-        case .chill: return "Chill"
-        case .journal: return "Journal"
+        case .brief: return "Brief"
+        case .outings: return "Outings"
         case .match: return "Match"
-        case .trends: return "Trends"
+        case .pattern: return "Pattern"
         }
     }
 }

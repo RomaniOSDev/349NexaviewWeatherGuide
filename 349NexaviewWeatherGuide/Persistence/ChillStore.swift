@@ -19,10 +19,25 @@ final class ChillStore: ObservableObject {
     @Published var exposureLimitMinutes: Int = 60
     @Published var exposureStartedAt: Date?
     @Published var isExposureRunning: Bool = false
+    @Published var todaysBrief: OutingBrief?
+    @Published var outingSeals: [OutingSeal] = []
 
     private let defaults: UserDefaults
     private var bag = Set<AnyCancellable>()
     private var siteDials: [String: SiteDial] = [:]
+
+    var latestCarryNote: String? {
+        guard let seal = outingSeals.first else { return nil }
+        let note = seal.carryNote.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !note.isEmpty else { return nil }
+        if OutingBrief.dayKey(for: seal.date) == OutingBrief.dayKey() { return nil }
+        return note
+    }
+
+    var isTodaysBriefSealed: Bool {
+        guard let todaysBrief else { return false }
+        return todaysBrief.dayKey == OutingBrief.dayKey()
+    }
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -159,7 +174,44 @@ final class ChillStore: ObservableObject {
         draftNote = entry.locationNote
         syncSelectedSite(with: entry.locationNote)
         dialRevision += 1
-        requestedSection = .chill
+        requestedSection = .brief
+    }
+
+    func sealTodaysBrief(chill: Double) {
+        let decision = GoNoGo.decide(chill: chill, units: preferredUnits, activity: activity)
+        let kit = ClothingAdvice.kitItems(chill: chill, units: preferredUnits, activity: activity)
+        todaysBrief = OutingBrief(
+            dayKey: OutingBrief.dayKey(),
+            activity: activity,
+            chill: chill,
+            units: preferredUnits,
+            decision: decision,
+            kitItems: kit,
+            sealedAt: Date()
+        )
+        persistBrief()
+    }
+
+    func clearTodaysBrief() {
+        todaysBrief = nil
+        defaults.removeObject(forKey: DefaultsKeys.todaysBrief)
+    }
+
+    func sealOuting(minutesOutside: Int, severity: OutingSeverity, carryNote: String, chill: Double) {
+        let seal = OutingSeal(
+            activity: activity,
+            minutesOutside: max(1, minutesOutside),
+            severity: severity,
+            carryNote: carryNote.trimmingCharacters(in: .whitespacesAndNewlines),
+            chill: chill,
+            units: preferredUnits
+        )
+        outingSeals.insert(seal, at: 0)
+        if outingSeals.count > 40 {
+            outingSeals = Array(outingSeals.prefix(40))
+        }
+        persistSeals()
+        stopExposureSession()
     }
 
     func applyLiveWeather(_ snapshot: LiveWeatherSnapshot) {
@@ -231,6 +283,10 @@ final class ChillStore: ObservableObject {
         defaults.removeObject(forKey: DefaultsKeys.chillAlertEnabled)
         defaults.removeObject(forKey: DefaultsKeys.chillAlertThreshold)
         defaults.removeObject(forKey: DefaultsKeys.exposureLimitMinutes)
+        defaults.removeObject(forKey: DefaultsKeys.todaysBrief)
+        defaults.removeObject(forKey: DefaultsKeys.outingSeals)
+        todaysBrief = nil
+        outingSeals = []
         NotificationCenter.default.post(name: Notification.Name("dataReset"), object: nil)
     }
 
@@ -288,6 +344,19 @@ final class ChillStore: ObservableObject {
         } else {
             exposureLimitMinutes = activity.defaultExposureMinutes
         }
+        if let data = defaults.data(forKey: DefaultsKeys.todaysBrief),
+           let decoded = try? JSONDecoder().decode(OutingBrief.self, from: data),
+           decoded.dayKey == OutingBrief.dayKey() {
+            todaysBrief = decoded
+        } else {
+            todaysBrief = nil
+        }
+        if let data = defaults.data(forKey: DefaultsKeys.outingSeals),
+           let decoded = try? JSONDecoder().decode([OutingSeal].self, from: data) {
+            outingSeals = decoded
+        } else {
+            outingSeals = []
+        }
     }
 
     private func persistAll() {
@@ -301,10 +370,26 @@ final class ChillStore: ObservableObject {
         defaults.set(chillAlertThreshold, forKey: DefaultsKeys.chillAlertThreshold)
         defaults.set(exposureLimitMinutes, forKey: DefaultsKeys.exposureLimitMinutes)
         persistSites()
+        persistBrief()
+        persistSeals()
         if let selectedSite {
             defaults.set(selectedSite.rawValue, forKey: DefaultsKeys.selectedSite)
         } else {
             defaults.removeObject(forKey: DefaultsKeys.selectedSite)
+        }
+    }
+
+    private func persistBrief() {
+        if let todaysBrief, let data = try? JSONEncoder().encode(todaysBrief) {
+            defaults.set(data, forKey: DefaultsKeys.todaysBrief)
+        } else {
+            defaults.removeObject(forKey: DefaultsKeys.todaysBrief)
+        }
+    }
+
+    private func persistSeals() {
+        if let data = try? JSONEncoder().encode(outingSeals) {
+            defaults.set(data, forKey: DefaultsKeys.outingSeals)
         }
     }
 

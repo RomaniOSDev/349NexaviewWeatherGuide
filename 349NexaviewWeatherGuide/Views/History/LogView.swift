@@ -25,10 +25,30 @@ struct LogView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 14) {
-                TrailBanner(kind: .journal, eyebrow: "FIELD JOURNAL", title: "Saved conditions")
+                TrailBanner(kind: .journal, eyebrow: "OUTING LOG", title: "Saved cold checks")
+                if !store.outingSeals.isEmpty {
+                    InstrumentPlate {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("RECENT SEALS")
+                                .font(ThemeMetrics.plate(11, weight: .bold))
+                                .foregroundColor(Palette.gold)
+                                .tracking(1.5)
+                            ForEach(store.outingSeals.prefix(3)) { seal in
+                                Text("\(seal.activity.title) · \(seal.minutesOutside) min · \(seal.severity.title)")
+                                    .font(ThemeMetrics.plate(14, weight: .semibold))
+                                    .foregroundColor(Palette.ivory)
+                                if !seal.carryNote.isEmpty {
+                                    Text(seal.carryNote)
+                                        .font(ThemeMetrics.plate(13))
+                                        .foregroundColor(Palette.ivory.opacity(0.75))
+                                }
+                            }
+                        }
+                    }
+                }
                 if store.windChillEntries.isEmpty {
                     InstrumentPlate {
-                        Text("No readings yet. Save a chill check and it will land here.")
+                        Text("No cold checks yet. Seal a brief on the Brief tab and save a reading.")
                             .font(ThemeMetrics.plate(15))
                             .foregroundColor(Palette.ivory)
                     }

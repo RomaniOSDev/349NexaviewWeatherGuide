@@ -33,11 +33,13 @@
 		8E97A45EDB46EE1378090A96 /* ChillGaugeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFBB69CD0AD490F52AB2F1C /* ChillGaugeView.swift */; };
 		920BB7476374986C57172B0B /* MainSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58C2BF198E995699FD1C5D1 /* MainSection.swift */; };
 		9A46FB8EE911857E9B8C064F /* ClothingAdvice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E079BD865ACD24898E7F67 /* ClothingAdvice.swift */; };
+		A1BRIEFSEAL000000000001 /* BriefSealPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BRIEFSEAL000000000002 /* BriefSealPanel.swift */; };
 		A1CHILLNOTIFY000000000001 /* ChillNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CHILLNOTIFY000000000002 /* ChillNotificationCenter.swift */; };
 		A1EXPTIMER000000000000001 /* ExposureTimerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EXPTIMER000000000000002 /* ExposureTimerCard.swift */; };
 		A1LIVEWCARD00000000000001 /* LiveWeatherCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1LIVEWCARD00000000000002 /* LiveWeatherCard.swift */; };
 		A1LIVEWEATHER000000000001 /* LiveWeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1LIVEWEATHER000000000002 /* LiveWeatherService.swift */; };
 		A1ONBOARDVIEW000000000001 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ONBOARDVIEW000000000002 /* OnboardingView.swift */; };
+		A1OUTINGRIT0000000000001 /* OutingRitual.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1OUTINGRIT0000000000002 /* OutingRitual.swift */; };
 		A1TRIPSHARE00000000000001 /* TripShareCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1TRIPSHARE00000000000002 /* TripShareCard.swift */; };
 		A30AB00A3F1062564FDA9E78 /* SafeParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AABE0813C02C49DABC06D0 /* SafeParse.swift */; };
 		B4C8EF2E3FADBA926EB22B28 /* UnitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDE0E82C80B9297037FE39D /* UnitBridge.swift */; };
@@ -93,11 +95,13 @@
 		8D14A6C0B3E79251F4A8C167 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		921F505068CD2A1CC8FD936D /* ContrastResultPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContrastResultPanel.swift; sourceTree = "<group>"; };
 		93C1C08693E6D0D9234D52B8 /* 349NexaviewWeatherGuide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 349NexaviewWeatherGuide.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1BRIEFSEAL000000000002 /* BriefSealPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriefSealPanel.swift; sourceTree = "<group>"; };
 		A1CHILLNOTIFY000000000002 /* ChillNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChillNotificationCenter.swift; sourceTree = "<group>"; };
 		A1EXPTIMER000000000000002 /* ExposureTimerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExposureTimerCard.swift; sourceTree = "<group>"; };
 		A1LIVEWCARD00000000000002 /* LiveWeatherCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWeatherCard.swift; sourceTree = "<group>"; };
 		A1LIVEWEATHER000000000002 /* LiveWeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWeatherService.swift; sourceTree = "<group>"; };
 		A1ONBOARDVIEW000000000002 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A1OUTINGRIT0000000000002 /* OutingRitual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutingRitual.swift; sourceTree = "<group>"; };
 		A1TRIPSHARE00000000000002 /* TripShareCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripShareCard.swift; sourceTree = "<group>"; };
 		A4C81E07B2D94F6A1E5C3B90 /* FieldOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldOptions.swift; sourceTree = "<group>"; };
 		A4DDE4088E231B0470E0E768 /* EntryPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryPickerSheet.swift; sourceTree = "<group>"; };
@@ -133,6 +137,7 @@
 				B5AFE50512EAF37C262C95C2 /* ChillComparison.swift */,
 				A4C81E07B2D94F6A1E5C3B90 /* FieldOptions.swift */,
 				B58C2BF198E995699FD1C5D1 /* MainSection.swift */,
+				A1OUTINGRIT0000000000002 /* OutingRitual.swift */,
 				5FB402095980B153790D9407 /* PreferredUnits.swift */,
 				584BA76ADC0B8C35D63F2BE6 /* WindChillEntry.swift */,
 			);
@@ -173,6 +178,7 @@
 		322B68C63B0B0A8A77955EFC /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				A1BRIEFSEAL000000000002 /* BriefSealPanel.swift */,
 				8BFBB69CD0AD490F52AB2F1C /* ChillGaugeView.swift */,
 				A1EXPTIMER000000000000002 /* ExposureTimerCard.swift */,
 				A1LIVEWCARD00000000000002 /* LiveWeatherCard.swift */,
@@ -427,6 +433,8 @@
 				C7B90E24A1D56F83C2E4B01A /* StatsView.swift in Sources */,
 				B5D92F18C3EA507B2F6D4C01 /* FieldOptions.swift in Sources */,
 				D7F14B3AE506729D4B8F6E23 /* FrostbiteRisk.swift in Sources */,
+				A1OUTINGRIT0000000000001 /* OutingRitual.swift in Sources */,
+				A1BRIEFSEAL000000000001 /* BriefSealPanel.swift in Sources */,
 				A1LIVEWEATHER000000000001 /* LiveWeatherService.swift in Sources */,
 				A1CHILLNOTIFY000000000001 /* ChillNotificationCenter.swift in Sources */,
 				A1ONBOARDVIEW000000000001 /* OnboardingView.swift in Sources */,
@@ -448,7 +456,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = 349NexaviewWeatherGuide/App/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Nexaview Weather Guide";
+				INFOPLIST_KEY_CFBundleDisplayName = "Nexaview Cold Brief";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is used only to fetch nearby air temperature and wind from Open-Meteo so you can compare live conditions with your manual chill check.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -458,7 +466,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ano.n3x1v83ww37th2r;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -534,7 +542,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = 349NexaviewWeatherGuide/App/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Nexaview Weather Guide";
+				INFOPLIST_KEY_CFBundleDisplayName = "Nexaview Cold Brief";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is used only to fetch nearby air temperature and wind from Open-Meteo so you can compare live conditions with your manual chill check.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -544,7 +552,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ano.n3x1v83ww37th2r;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

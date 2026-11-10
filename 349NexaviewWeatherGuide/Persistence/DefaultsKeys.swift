@@ -13,4 +13,6 @@ enum DefaultsKeys {
     static let chillAlertEnabled = "chillAlertEnabled"
     static let chillAlertThreshold = "chillAlertThreshold"
     static let exposureLimitMinutes = "exposureLimitMinutes"
+    static let todaysBrief = "todaysBrief"
+    static let outingSeals = "outingSeals"
 }

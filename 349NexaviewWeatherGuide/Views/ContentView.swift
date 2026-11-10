@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var store = ChillStore()
-    @State private var section: MainSection = .chill
+    @State private var section: MainSection = .brief
     @State private var showSettings = false
 
     var body: some View {
@@ -44,13 +44,13 @@ struct ContentView: View {
 
                 Group {
                     switch section {
-                    case .chill:
+                    case .brief:
                         MeasureView()
-                    case .journal:
+                    case .outings:
                         LogView()
                     case .match:
                         ContrastView()
-                    case .trends:
+                    case .pattern:
                         StatsView()
                     }
                 }

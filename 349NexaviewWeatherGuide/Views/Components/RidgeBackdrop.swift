@@ -9,10 +9,10 @@ struct RidgeBackdrop<Content: View>: View {
             .background {
                 Color("AppBackground")
                     .overlay {
-                        Image("BgRidge")
+                        Image("BgCold")
                             .resizable()
                             .scaledToFill()
-                            .opacity(0.34)
+                            .opacity(0.38)
                     }
                     .clipped()
                     .ignoresSafeArea()

@@ -8,8 +8,8 @@ struct OnboardingView: View {
         RidgeBackdrop {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 18) {
-                    TrailBanner(kind: .exposure, eyebrow: "COLD EXPOSURE PLAN", title: "How are you outside today?")
-                    Text("Pick a scenario. Kit tips, exposure timers, and the first screen adapt to how you move in the cold.")
+                    TrailBanner(kind: .exposure, eyebrow: "COLD OUTING BRIEF", title: "How are you outside today?")
+                    Text("Pick a scenario. Your go/no-go brief, kit seal, exposure timer, and carry notes adapt to how you move in the cold.")
                         .font(ThemeMetrics.plate(15))
                         .foregroundColor(Palette.ivory.opacity(0.9))
                         .fixedSize(horizontal: false, vertical: true)
@@ -50,7 +50,7 @@ struct OnboardingView: View {
                         .buttonStyle(.plain)
                     }
 
-                    BrassAction(title: "Start planning", enabled: true) {
+                    BrassAction(title: "Open today's brief", enabled: true) {
                         store.completeOnboarding(with: selected)
                     }
                     .padding(.top, 6)

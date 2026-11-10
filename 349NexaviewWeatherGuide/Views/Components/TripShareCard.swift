@@ -12,7 +12,7 @@ struct TripShareCard: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("NEXAVIEW COLD PLAN")
+                    Text("NEXAVIEW COLD BRIEF")
                         .font(ThemeMetrics.plate(11, weight: .bold))
                         .foregroundColor(Palette.gold)
                         .tracking(1.4)

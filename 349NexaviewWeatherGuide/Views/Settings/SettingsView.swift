@@ -10,10 +10,10 @@ struct SettingsView: View {
         RidgeBackdrop {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 16) {
-                    TrailBanner(kind: .trends, eyebrow: "PREFERENCES", title: "Plan and alerts")
+                    TrailBanner(kind: .trends, eyebrow: "PREFERENCES", title: "Brief and alerts")
                     unitsPlate
                     alertsPlate
-                    actionPlate(title: "Change scenario", detail: "Re-open hiking / working / skiing onboarding.") {
+                    actionPlate(title: "Change scenario", detail: "Re-open hiking / working / skiing briefing.") {
                         store.hasCompletedOnboarding = false
                         UserDefaults.standard.set(false, forKey: DefaultsKeys.onboardingDone)
                         dismiss()
